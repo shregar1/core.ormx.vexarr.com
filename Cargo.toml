@@ -1,0 +1,51 @@
+[package]
+name = "ormx-core"
+version = "0.5.2"
+edition = "2021"
+
+[workspace]
+members = ["ormx-migrate"]
+resolver = "2"
+
+[lib]
+name = "ormx_core"
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["extension-module"]
+extension-module = ["pyo3/extension-module"]
+
+[dependencies]
+pyo3 = { version = "0.20", features = ["abi3-py37"] }
+pyo3-asyncio = { version = "0.20", features = ["tokio-runtime"] }
+tokio = { version = "1.35", features = ["full"] }
+sqlx = { version = "0.7", features = [
+    "runtime-tokio-native-tls",
+    "postgres",
+    "mysql",
+    "sqlite",
+    "chrono",
+    "json",
+    "uuid",
+    "ipnetwork",
+] }
+ipnetwork = "0.20"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = "0.4"
+uuid = { version = "1", features = ["serde"] }
+thiserror = "1.0"
+tracing = "0.1"
+futures = "0.3"
+md5 = "0.7"
+ormx-migrate = { path = "ormx-migrate" }
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[build-dependencies]
+pyo3-build-config = "0.20"
+
+[[bench]]
+name = "microbench"
+harness = false
